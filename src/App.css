@@ -37,6 +37,10 @@
   font-size: 40px;
 }
 
+.scoreboard-title{
+  float: right;
+}
+
 .challenge {
   margin-bottom: 20px;
 }
@@ -53,7 +57,7 @@
   font-size: 30px;
   margin: 0 0 10px;
   font-weight: 800;
-  color: #C9E2E0;
+  color: #FF00FF;
 }
 
 .input input {
@@ -62,7 +66,7 @@
   font-weight: 800;
   padding: 25px 30px;
   margin-top: 0px;
-  font-family: 'Raleway';
+  font-family: 'Arial Regular';
   color: #000;
   border: none;
   outline: none;
