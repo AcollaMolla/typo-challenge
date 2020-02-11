@@ -7,6 +7,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.saveName = this.saveName.bind(this);
+
     this.interval = null;
     this.challenge = 'Lorem ipsum knowit är bäst dolor sit amet';
     this.localStorageName = 'typochallenge';
@@ -17,14 +20,16 @@ class App extends Component {
     }
 
     if(!this.getScoreboard()){
-      this.saveScoreboard([{time: 60000, name: "Test"}]);
+      this.saveScoreboard([{time: 60000, name: "Anton"}]);
     }
 
     this.state = {
       time: 0,
       worldRecord: this.getScoreboard()[0].time,
       newWorldRecord: false,
-      scoreboard: this.getScoreboard()
+      scoreboard: this.getScoreboard(),
+      finishedTyping: false,
+      playerName: ""
     }
   }
 
@@ -36,9 +41,10 @@ class App extends Component {
   stop() {
     console.log('stop');
     clearInterval(this.interval);
-    let scoreboard = this.updateScoreboard(this.state.time);
-    this.setState({scoreboard: scoreboard});
-    this.saveScoreboard(scoreboard);
+    this.setState({
+      finishedTyping: true
+    });
+
     if(this.state.time < this.state.worldRecord) {
       console.log('wr');
       this.saveWorldRecord(this.state.time);
@@ -46,7 +52,6 @@ class App extends Component {
         worldRecord: this.state.time,
         newWorldRecord: true,
       });
-      this.saveScoreboard(scoreboard);
     }
   }
 
@@ -118,14 +123,14 @@ class App extends Component {
   updateScoreboard(time){
     let scoreboard = this.state.scoreboard;
     if(time < this.state.worldRecord){
-      scoreboard.splice(0, 0, {time: time, name: "Anton"})
+      scoreboard.splice(0, 0, {time: time, name: this.state.playerName})
       scoreboard.join();
       return scoreboard;
     }
     var test = this.formatTime(scoreboard[scoreboard.length - 1].time);
     if(time > scoreboard[scoreboard.length - 1].time)
       if(scoreboard.length <10){
-        scoreboard[scoreboard.length] = {time: time, name: "Test"}
+        scoreboard[scoreboard.length] = {time: time, name: this.state.playerName}
         return scoreboard;
       }
       else
@@ -133,7 +138,7 @@ class App extends Component {
     else if(time < scoreboard[scoreboard.length -1].time){
         for(let i=1;i<9;i++){
           if(time <= scoreboard[i].time){
-            scoreboard.splice(i, 0, {time: time, name: "Test2"});
+            scoreboard.splice(i, 0, {time: time, name: this.state.playerName});
             scoreboard.join();
             if(scoreboard.length > 10)
               scoreboard.pop();
@@ -154,9 +159,37 @@ class App extends Component {
     }
   }
 
+  saveName(){
+    let scoreboard = this.updateScoreboard(this.state.time);
+    this.saveScoreboard(scoreboard);
+    this.setState({
+      finishedTyping: false,
+      scoreboard: scoreboard
+    });
+    window.location.reload();
+  }
+
+  cancel(){
+    window.location.reload();
+  }
+
+  handleNameChange(e){
+    this.setState({playerName: e.target.value});
+  }
+
   render() {
     return (
+
       <div className="app">
+        {this.state.finishedTyping ? (
+          <div id="popup">
+            <div id="enter-name">
+                <input name="name" type="text" onChange={this.handleNameChange}/>
+                <input type="button" value="Save" onClick={this.saveName}/>
+                <input type="button" value="Cancel" onClick={this.cancel}/>
+            </div>
+          </div>
+        ):null}
         <div className="logo">
           <img src={logo} alt="knowit" />
         </div>
