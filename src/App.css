@@ -37,10 +37,6 @@
   font-size: 40px;
 }
 
-.scoreboard-title{
-  float: right;
-}
-
 .challenge {
   margin-bottom: 20px;
 }
@@ -58,6 +54,10 @@
   margin: 0 0 10px;
   font-weight: 800;
   color: #FF00FF;
+}
+
+.scoreboard-title{
+  float: right;
 }
 
 .input input {
